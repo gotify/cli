@@ -1,0 +1,28 @@
+language: go
+go:
+- "1.11"
+
+notifications:
+  email: false
+
+env:
+- GO111MODULE=on
+
+install:
+- go mod download
+- go mod verify
+
+script:
+- go install ./...
+
+before_deploy:
+- GIT_TAG=$TRAVIS_TAG make clean build
+
+deploy:
+- provider: releases
+  api_key: $GH_TOKEN
+  file_glob: true
+  file: build/*
+  skip_cleanup: true
+  on:
+    tags: true
