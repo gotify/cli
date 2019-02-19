@@ -137,17 +137,17 @@ Gotify-CLI will search the following paths for a config file:
 }
 ```
 
-### Dockefile
+### Dockerfile
 The Dockerfile contains the steps necessary to build a new version of the CLI and then run it in 
 a minimal Alpine container.
 
-Build:
+**Build:**
 
 ```bash
 docker build -t gotify/gotify-cli .
 ```
 
-Run (this assumes your `cli.json` file is in the current working directory):
+**Run (this assumes your `cli.json` file is in the current working directory):**
 
 ```bash
 docker run -it -v "$PWD/cli.json:/home/app/cli.json" gotify/gotify-cli:latest push -p 5 "Test from Gotify CLI"
