@@ -58,6 +58,6 @@ func WriteConfig(location string, conf *Config) error {
 	if err != nil {
 		return err
 	}
-	os.MkdirAll(filepath.Dir(location), 0644)
+	os.MkdirAll(filepath.Dir(location), 0755)
 	return ioutil.WriteFile(location, bytes, 0644)
 }
