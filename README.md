@@ -26,7 +26,7 @@ $ http -f POST "https://push.example.de/message?token=<apptoken>" title="my titl
 
 Download the [latest release][release] for your os: (this example uses version `v1.2.0`)
 ```bash
-$ wget -o gotify https://github.com/gotify/cli/releases/download/v1.2.0/gotify-cli-linux-amd64
+$ wget -O gotify https://github.com/gotify/cli/releases/download/v1.2.0/gotify-cli-linux-amd64
 # or
 $ curl -Lo gotify https://github.com/gotify/cli/releases/download/v1.2.0/gotify-cli-linux-amd64
 ```
