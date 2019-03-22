@@ -4,25 +4,25 @@ import (
 	"os/user"
 	"path/filepath"
 	"runtime"
-
-	"github.com/gotify/cli/utils"
 )
 
-func userDir() string {
+func userDir() (string, error) {
 	usr, err := user.Current()
 	if err != nil {
-		utils.Exit1With(err)
+		return "", err
 	}
-	return usr.HomeDir
+	return usr.HomeDir, nil
 }
 
-func GetLocations() []string {
-	inUserDir := filepath.Join(userDir(), ".gotify", "cli.json")
-	etcPath := "/etc/gotify/cli.json"
-	relativePath := "./cli.json"
-	if runtime.GOOS == "windows" {
-		return []string{relativePath, inUserDir}
-	} else {
-		return []string{relativePath, inUserDir, etcPath}
+func GetLocations() (res []string) {
+	res = append(res, "./cli.json")
+
+	if usrDir, err := userDir(); err != nil {
+		res = append(res, filepath.Join(usrDir, ".gotify", "cli.json"))
 	}
+
+	if runtime.GOOS != "windows" {
+		res = append(res, "/etc/gotify/cli.json")
+	}
+	return
 }
