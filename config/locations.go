@@ -6,19 +6,11 @@ import (
 	"runtime"
 )
 
-func userDir() (string, error) {
-	usr, err := user.Current()
-	if err != nil {
-		return "", err
-	}
-	return usr.HomeDir, nil
-}
-
 func GetLocations() (res []string) {
 	res = append(res, "./cli.json")
 
-	if usrDir, err := userDir(); err != nil {
-		res = append(res, filepath.Join(usrDir, ".gotify", "cli.json"))
+	if usr, err := user.Current(); err != nil {
+		res = append(res, filepath.Join(usr.HomeDir, ".gotify", "cli.json"))
 	}
 
 	if runtime.GOOS != "windows" {
