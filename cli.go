@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/gotify/cli/command"
-	"github.com/gotify/cli/utils"
+	"github.com/gotify/cli/v2/command"
+	"github.com/gotify/cli/v2/utils"
 	"gopkg.in/urfave/cli.v1"
 )
 

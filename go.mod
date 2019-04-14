@@ -1,4 +1,4 @@
-module github.com/gotify/cli
+module github.com/gotify/cli/v2
 
 require (
 	github.com/go-openapi/analysis v0.19.0 // indirect
