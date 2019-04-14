@@ -110,6 +110,7 @@ OPTIONS:
    --token value               Override the app token
    --url value                 Override the Gotify URL
    --quiet, -q                 Do not output anything (on success)
+   --contentType value         The content type of the message. See https://gotify.net/docs/msgextras#client-display
 ```
 
 ## Configuration
