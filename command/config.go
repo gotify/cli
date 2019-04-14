@@ -3,8 +3,8 @@ package command
 import (
 	"fmt"
 
-	"github.com/gotify/cli/config"
-	"github.com/gotify/cli/utils"
+	"github.com/gotify/cli/v2/config"
+	"github.com/gotify/cli/v2/utils"
 	"gopkg.in/urfave/cli.v1"
 )
 

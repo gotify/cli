@@ -7,8 +7,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/gotify/cli/config"
-	"github.com/gotify/cli/utils"
+	"github.com/gotify/cli/v2/config"
+	"github.com/gotify/cli/v2/utils"
 	"github.com/gotify/go-api-client/v2/auth"
 	"github.com/gotify/go-api-client/v2/client/message"
 	"github.com/gotify/go-api-client/v2/gotify"
