@@ -13,12 +13,12 @@ import (
 	apiruntime "github.com/go-openapi/runtime"
 	"github.com/gotify/cli/config"
 	"github.com/gotify/cli/utils"
-	"github.com/gotify/go-api-client/auth"
-	api "github.com/gotify/go-api-client/client"
-	"github.com/gotify/go-api-client/client/application"
-	"github.com/gotify/go-api-client/client/message"
-	"github.com/gotify/go-api-client/gotify"
-	"github.com/gotify/server/model"
+	"github.com/gotify/go-api-client/v2/auth"
+	api "github.com/gotify/go-api-client/v2/client"
+	"github.com/gotify/go-api-client/v2/client/application"
+	"github.com/gotify/go-api-client/v2/client/message"
+	"github.com/gotify/go-api-client/v2/gotify"
+	"github.com/gotify/go-api-client/v2/models"
 	"golang.org/x/crypto/ssh/terminal"
 	"gopkg.in/urfave/cli.v1"
 )
@@ -155,7 +155,7 @@ func createToken(gotify *api.GotifyREST, auth apiruntime.ClientAuthInfoWriter) s
 
 		resp, err := utils.SpinLoader("Creating", func(success chan interface{}, failure chan error) {
 			params := application.NewCreateAppParams()
-			params.Body = &model.Application{Name: name, Description: description}
+			params.Body = &models.Application{Name: name, Description: description}
 			resp, err := gotify.Application.CreateApp(params, auth)
 			if err == nil {
 				success <- *resp.Payload
@@ -165,7 +165,7 @@ func createToken(gotify *api.GotifyREST, auth apiruntime.ClientAuthInfoWriter) s
 		})
 
 		if err == nil {
-			app := resp.(model.Application)
+			app := resp.(models.Application)
 			return app.Token
 		}
 	}
@@ -183,7 +183,7 @@ func inputRawToken(gotify *api.GotifyREST) string {
 		}
 		_, err := utils.SpinLoader("Validating", func(success chan interface{}, failure chan error) {
 			params := message.NewCreateMessageParams()
-			params.Body = &model.Message{
+			params.Body = &models.MessageExternal{
 				Title:    "Test message",
 				Message:  "Test message from Gotify CLI",
 				Priority: 0,
@@ -234,7 +234,7 @@ func inputServerURL() *url.URL {
 			}
 		})
 		if err == nil {
-			info := version.(model.VersionInfo)
+			info := version.(models.VersionInfo)
 			fmt.Println(fmt.Sprintf("Gotify v%s@%s", info.Version, info.BuildDate))
 			return parsedURL
 		}

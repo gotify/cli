@@ -9,10 +9,10 @@ import (
 
 	"github.com/gotify/cli/config"
 	"github.com/gotify/cli/utils"
-	"github.com/gotify/go-api-client/auth"
-	"github.com/gotify/go-api-client/client/message"
-	"github.com/gotify/go-api-client/gotify"
-	"github.com/gotify/server/model"
+	"github.com/gotify/go-api-client/v2/auth"
+	"github.com/gotify/go-api-client/v2/client/message"
+	"github.com/gotify/go-api-client/v2/gotify"
+	"github.com/gotify/go-api-client/v2/models"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -59,7 +59,7 @@ func doPush(ctx *cli.Context) {
 		stringURL = conf.URL
 	}
 
-	msg := model.Message{
+	msg := models.MessageExternal{
 		Message:  msgText,
 		Title:    title,
 		Priority: priority,
@@ -74,7 +74,7 @@ func doPush(ctx *cli.Context) {
 	pushMessage(parsedURL, token, msg, quiet)
 }
 
-func pushMessage(parsedURL *url.URL, token string, msg model.Message, quiet bool) {
+func pushMessage(parsedURL *url.URL, token string, msg models.MessageExternal, quiet bool) {
 	client := gotify.NewClient(parsedURL, &http.Client{})
 
 	params := message.NewCreateMessageParams()
