@@ -29,6 +29,7 @@ func Push() cli.Command {
 			cli.StringFlag{Name: "token", Usage: "Override the app token"},
 			cli.StringFlag{Name: "url", Usage: "Override the Gotify URL"},
 			cli.BoolFlag{Name: "quiet,q", Usage: "Do not output anything (on success)"},
+			cli.StringFlag{Name: "contentType", Usage: "The content type of the message. See https://gotify.net/docs/msgextras#client-display"},
 		},
 		Action: doPush,
 	}
@@ -43,6 +44,7 @@ func doPush(ctx *cli.Context) {
 	title := ctx.String("title")
 	token := ctx.String("token")
 	quiet := ctx.Bool("quiet")
+	contentType := ctx.String("contentType")
 	if token == "" {
 		if confErr != nil {
 			utils.Exit1With("token is not configured, run 'gotify init'")
@@ -63,6 +65,14 @@ func doPush(ctx *cli.Context) {
 		Message:  msgText,
 		Title:    title,
 		Priority: priority,
+	}
+
+	if contentType != "" {
+		msg.Extras = map[string]interface{}{
+			"client::display": map[string]interface{}{
+				"contentType": contentType,
+			},
+		}
 	}
 
 	parsedURL, err := url.Parse(stringURL)
