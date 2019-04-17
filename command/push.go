@@ -16,6 +16,7 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
+
 func Push() cli.Command {
 	return cli.Command{
 		Name:        "push",
@@ -30,6 +31,7 @@ func Push() cli.Command {
 			cli.StringFlag{Name: "url", Usage: "Override the Gotify URL"},
 			cli.BoolFlag{Name: "quiet,q", Usage: "Do not output anything (on success)"},
 			cli.StringFlag{Name: "contentType", Usage: "The content type of the message. See https://gotify.net/docs/msgextras#client-display"},
+			cli.BoolFlag{Name: "disable-unescape-backslash", Usage: "Disable evaluating \\n and \\t (if set, \\n and \\t will be seen as a string)"},
 		},
 		Action: doPush,
 	}
@@ -39,6 +41,9 @@ func doPush(ctx *cli.Context) {
 	conf, confErr := config.ReadConfig(config.GetLocations())
 
 	msgText := readMessage(ctx)
+	if !ctx.Bool("disable-unescape-backslash") {
+		msgText = utils.Evaluate(msgText)
+	}
 
 	priority := ctx.Int("priority")
 	title := ctx.String("title")

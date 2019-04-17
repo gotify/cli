@@ -105,12 +105,13 @@ DESCRIPTION:
    echo my text | gotify push
 
 OPTIONS:
-   --priority value, -p value  Set the priority (default: 0)
-   --title value, -t value     Set the title (empty for app name)
-   --token value               Override the app token
-   --url value                 Override the Gotify URL
-   --quiet, -q                 Do not output anything (on success)
-   --contentType value         The content type of the message. See https://gotify.net/docs/msgextras#client-display
+   --priority value, -p value    Set the priority (default: 0)
+   --title value, -t value       Set the title (empty for app name)
+   --token value                 Override the app token
+   --url value                   Override the Gotify URL
+   --quiet, -q                   Do not output anything (on success)
+   --contentType value           The content type of the message. See https://gotify.net/docs/msgextras#client-display
+   --disable-unescape-backslash  Disable evaluating \n and \t (if set, \n and \t will be seen as a string)
 ```
 
 ## Configuration
