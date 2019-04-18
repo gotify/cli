@@ -13,7 +13,7 @@ install:
 - go mod verify
 
 script:
-- go install ./...
+- go test ./...
 
 before_deploy:
 - GIT_TAG=$TRAVIS_TAG make clean build
