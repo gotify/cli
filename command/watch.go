@@ -92,8 +92,8 @@ func doWatch(ctx *cli.Context) {
 		select {
 		case err := <-done:
 			return outputBuf.String(), err
-
 		case <-timeOut:
+			cmd.Process.Kill()
 			return outputBuf.String(), errors.New("command timed out")
 		}
 	}
