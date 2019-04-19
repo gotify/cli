@@ -29,6 +29,7 @@ func main() {
 		command.Version(),
 		command.Config(),
 		command.Push(),
+		command.Watch(),
 	}
 	err := app.Run(os.Args)
 	if err != nil {

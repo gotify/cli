@@ -16,7 +16,6 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-
 func Push() cli.Command {
 	return cli.Command{
 		Name:        "push",
