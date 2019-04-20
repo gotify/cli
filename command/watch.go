@@ -27,7 +27,7 @@ func Watch() cli.Command {
 			cli.StringFlag{Name: "title,t", Usage: "Set the title (empty for command)"},
 			cli.StringFlag{Name: "token", Usage: "Override the app token"},
 			cli.StringFlag{Name: "url", Usage: "Override the Gotify URL"},
-			cli.BoolFlag{Name: "compare,c", Usage: "Include the previous output in notification"},
+			cli.StringFlag{Name: "output,o", Usage: "Output verbosity (short|default|long)", Value: "default"},
 		},
 		Action: doWatch,
 	}
@@ -42,7 +42,11 @@ func doWatch(ctx *cli.Context) {
 	cmdArgs = append(execArgs[1:], cmdStringNotation)
 	execCmd := execArgs[0]
 
-	sendOldOutput := ctx.Bool("compare")
+	outputMode := ctx.String("output")
+	if !(outputMode == "default" || outputMode == "long" || outputMode == "short") {
+		utils.Exit1With("output mode should be short|default|long")
+		return
+	}
 	interval := ctx.Float64("interval")
 	priority := ctx.Int("priority")
 	title := ctx.String("title")
@@ -113,14 +117,21 @@ func doWatch(ctx *cli.Context) {
 			msgData := bytes.NewBuffer([]byte{})
 			fmt.Fprintf(msgData, "command output for \"%s\" changed:\n\n", cmdStringNotation)
 
-			if sendOldOutput {
+			switch outputMode {
+			case "long":
 				fmt.Fprintln(msgData, "== BEGIN OLD OUTPUT ==")
 				fmt.Fprint(msgData, lastOutput)
 				fmt.Fprintln(msgData, "== END OLD OUTPUT ==")
+				fmt.Fprintln(msgData, "== BEGIN NEW OUTPUT ==")
+				fmt.Fprint(msgData, output)
+				fmt.Fprintln(msgData, "== END NEW OUTPUT ==")
+			case "default":
+				fmt.Fprintln(msgData, "== BEGIN NEW OUTPUT ==")
+				fmt.Fprint(msgData, output)
+				fmt.Fprintln(msgData, "== END NEW OUTPUT ==")
+			case "short":
+				fmt.Fprintf(msgData, output)
 			}
-			fmt.Fprintln(msgData, "== BEGIN NEW OUTPUT ==")
-			fmt.Fprint(msgData, output)
-			fmt.Fprintln(msgData, "== END NEW OUTPUT ==")
 
 			msgString := msgData.String()
 			fmt.Println(msgString)
