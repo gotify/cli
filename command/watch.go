@@ -21,12 +21,13 @@ func Watch() cli.Command {
 		Usage:     "watch the result of a command and pushes output difference",
 		ArgsUsage: "<cmd>",
 		Flags: []cli.Flag{
-			cli.Float64Flag{Name: "interval,n", Usage: "watch interval (sec)", Value: 2.},
+			cli.Float64Flag{Name: "interval,n", Usage: "watch interval (sec)", Value: 2},
 			cli.IntFlag{Name: "priority,p", Usage: "Set the priority"},
 			cli.StringFlag{Name: "exec,x", Usage: "Pass command to exec (default to \"sh -c\")", Value: "sh -c"},
 			cli.StringFlag{Name: "title,t", Usage: "Set the title (empty for command)"},
 			cli.StringFlag{Name: "token", Usage: "Override the app token"},
 			cli.StringFlag{Name: "url", Usage: "Override the Gotify URL"},
+			cli.BoolFlag{Name: "compare,c", Usage: "Include the previous output in notification"},
 		},
 		Action: doWatch,
 	}
@@ -41,6 +42,7 @@ func doWatch(ctx *cli.Context) {
 	cmdArgs = append(execArgs[1:], cmdStringNotation)
 	execCmd := execArgs[0]
 
+	sendOldOutput := ctx.Bool("compare")
 	interval := ctx.Float64("interval")
 	priority := ctx.Int("priority")
 	title := ctx.String("title")
@@ -102,17 +104,20 @@ func doWatch(ctx *cli.Context) {
 	if err != nil {
 		utils.Exit1With("first run failed", err)
 	}
-	for execTime := range time.NewTicker(watchInterval).C {
+	for range time.NewTicker(watchInterval).C {
 		output, err := evalCmdOutput()
 		if err != nil {
 			output += fmt.Sprintf("\n!== <%v> ==!", err)
 		}
 		if output != lastOutput {
 			msgData := bytes.NewBuffer([]byte{})
-			fmt.Fprintf(msgData, "command output for \"%s\" changed at %v\n\n", cmdStringNotation, execTime)
-			fmt.Fprintln(msgData, "== BEGIN OLD OUTPUT ==")
-			fmt.Fprint(msgData, lastOutput)
-			fmt.Fprintln(msgData, "== END OLD OUTPUT ==")
+			fmt.Fprintf(msgData, "command output for \"%s\" changed:\n\n", cmdStringNotation)
+
+			if sendOldOutput {
+				fmt.Fprintln(msgData, "== BEGIN OLD OUTPUT ==")
+				fmt.Fprint(msgData, lastOutput)
+				fmt.Fprintln(msgData, "== END OLD OUTPUT ==")
+			}
 			fmt.Fprintln(msgData, "== BEGIN NEW OUTPUT ==")
 			fmt.Fprint(msgData, output)
 			fmt.Fprintln(msgData, "== END NEW OUTPUT ==")
