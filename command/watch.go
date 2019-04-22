@@ -115,10 +115,10 @@ func doWatch(ctx *cli.Context) {
 		}
 		if output != lastOutput {
 			msgData := bytes.NewBuffer([]byte{})
-			fmt.Fprintf(msgData, "command output for \"%s\" changed:\n\n", cmdStringNotation)
 
 			switch outputMode {
 			case "long":
+				fmt.Fprintf(msgData, "command output for \"%s\" changed:\n\n", cmdStringNotation)
 				fmt.Fprintln(msgData, "== BEGIN OLD OUTPUT ==")
 				fmt.Fprint(msgData, lastOutput)
 				fmt.Fprintln(msgData, "== END OLD OUTPUT ==")
@@ -126,6 +126,7 @@ func doWatch(ctx *cli.Context) {
 				fmt.Fprint(msgData, output)
 				fmt.Fprintln(msgData, "== END NEW OUTPUT ==")
 			case "default":
+				fmt.Fprintf(msgData, "command output for \"%s\" changed:\n\n", cmdStringNotation)
 				fmt.Fprintln(msgData, "== BEGIN NEW OUTPUT ==")
 				fmt.Fprint(msgData, output)
 				fmt.Fprintln(msgData, "== END NEW OUTPUT ==")
