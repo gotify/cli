@@ -67,7 +67,7 @@ $ gotify watch "curl http://example.com/api | jq '.data'"
 
 ## Help
 
-**Uses version `v1.3.0`**
+**Uses version `v2.1.0`**
 
 ```bash
 NAME:
@@ -77,7 +77,7 @@ USAGE:
    cli [global options] command [command options] [arguments...]
 
 VERSION:
-   1.3.0
+   2.1.0
 
 COMMANDS:
      init        Initializes the Gotify-CLI
