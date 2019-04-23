@@ -12,6 +12,7 @@ Gotify-CLI is a command line client for pushing messages to [gotify/server][goti
 * initialization wizard
 * piping support (`echo message | gotify push`)
 * simple to use
+* watch and push script result changes (`gotify watch "curl http://example.com/api | jq '.data'"`)
 
 ## Alternatives
 
@@ -61,33 +62,53 @@ $ gotify push "my message"
 $ echo my message | gotify push
 $ gotify push < somefile
 $ gotify push -t "my title" -p 10 "my message"
+$ gotify watch "curl http://example.com/api | jq '.data'"
 ```
 
 ## Help
 
-**Uses version `v1.2.0`**
+**Uses version `v2.1.0`**
 
 ```bash
-$ gotify help
 NAME:
    Gotify - The official Gotify-CLI
 
 USAGE:
-   gotify [global options] command [command options] [arguments...]
+   cli [global options] command [command options] [arguments...]
 
 VERSION:
-   1.2.0
+   2.1.0
 
 COMMANDS:
      init        Initializes the Gotify-CLI
      version, v  Shows the version
      config      Shows the config
      push, p     Pushes a message
+     watch       watch the result of a command and pushes output difference
      help, h     Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
    --help, -h     show help
    --version, -v  print the version
+```
+
+### Watch help
+
+```
+NAME:
+   cli watch - watch the result of a command and pushes output difference
+
+USAGE:
+   cli watch [command options] <cmd>
+
+OPTIONS:
+   --interval value, -n value  watch interval (sec) (default: 2)
+   --priority value, -p value  Set the priority (default: 0)
+   --exec value, -x value      Pass command to exec (default to "sh -c")
+   --title value, -t value     Set the title (empty for command)
+   --token value               Override the app token
+   --url value                 Override the Gotify URL
+   --output value, -o value    Output verbosity (short|default|long) (default: "default")
 ```
 
 ### Push help
