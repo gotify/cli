@@ -9,7 +9,7 @@ import (
 func GetLocations() (res []string) {
 	res = append(res, "./cli.json")
 
-	if usr, err := user.Current(); err != nil {
+	if usr, err := user.Current(); err == nil {
 		res = append(res, filepath.Join(usr.HomeDir, ".gotify", "cli.json"))
 	}
 
