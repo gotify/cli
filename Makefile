@@ -12,3 +12,5 @@ build:
 	CGO_ENABLED=0 GOOS=linux   GOARCH=386         go build -ldflags="${LD_FLAGS}" -o build/gotify-cli-linux-386         cli.go
 	CGO_ENABLED=0 GOOS=linux   GOARCH=arm64       go build -ldflags="${LD_FLAGS}" -o build/gotify-cli-linux-arm64       cli.go
 	CGO_ENABLED=0 GOOS=linux   GOARCH=arm GOARM=7 go build -ldflags="${LD_FLAGS}" -o build/gotify-cli-linux-arm-7       cli.go
+	CGO_ENABLED=0 GOOS=darwin  GOARCH=amd64       go build -ldflags="${LD_FLAGS}" -o build/gotify-cli-darwin-amd64      cli.go
+	CGO_ENABLED=0 GOOS=darwin  GOARCH=386         go build -ldflags="${LD_FLAGS}" -o build/gotify-cli-darwin-386        cli.go
