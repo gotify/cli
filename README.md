@@ -141,6 +141,7 @@ OPTIONS:
 
 Gotify-CLI will search the following paths for a config file:
 * `/etc/gotify/cli.json`
+* `$XDG_CONFIG_HOME/gotify/cli.json`
 * `~/.gotify/cli.json`
 * `./cli.json`
 
