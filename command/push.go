@@ -2,7 +2,6 @@ package command
 
 import (
 	"fmt"
-	"net/http"
 	"net/url"
 	"os"
 	"strings"
@@ -89,7 +88,8 @@ func doPush(ctx *cli.Context) {
 }
 
 func pushMessage(parsedURL *url.URL, token string, msg models.MessageExternal, quiet bool) {
-	client := gotify.NewClient(parsedURL, &http.Client{})
+
+	client := gotify.NewClient(parsedURL, utils.CreateHTTPClient())
 
 	params := message.NewCreateMessageParams()
 	params.Body = &msg
