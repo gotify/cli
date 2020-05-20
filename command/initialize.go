@@ -3,7 +3,6 @@ package command
 import (
 	"bufio"
 	"fmt"
-	"net/http"
 	"net/url"
 	"os"
 	"strconv"
@@ -34,7 +33,7 @@ func Init() cli.Command {
 func doInit(ctx *cli.Context) {
 	serverURL := inputServerURL()
 	hr()
-	token := inputToken(gotify.NewClient(serverURL, &http.Client{}))
+	token := inputToken(gotify.NewClient(serverURL, utils.CreateHTTPClient()))
 	hr()
 
 	conf := &config.Config{
@@ -224,7 +223,7 @@ func inputServerURL() *url.URL {
 		}
 
 		version, err := utils.SpinLoader("Connecting", func(success chan interface{}, failure chan error) {
-			client := gotify.NewClient(parsedURL, &http.Client{})
+			client := gotify.NewClient(parsedURL, utils.CreateHTTPClient())
 
 			ver, e := client.Version.GetVersion(nil)
 			if e == nil {

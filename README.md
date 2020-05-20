@@ -161,6 +161,14 @@ Gotify-CLI will search the following paths for a config file:
 }
 ```
 
+## Configuration option
+
+If needed, you can disable SSL handcheck validation using an environment variable:
+```
+export GOTIFY_SKIP_VERIFY_TLS=True
+```
+
+
 ### Dockerfile
 The Dockerfile contains the steps necessary to build a new version of the CLI and then run it in 
 a minimal Alpine container.
