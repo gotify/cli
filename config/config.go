@@ -1,7 +1,8 @@
 package config
 
 type Config struct {
-	Token        string `json:"token"`
-	URL          string `json:"url"`
-	FromLocation string `json:"-"`
+	Token           string `json:"token"`
+	URL             string `json:"url"`
+	DefaultPriority int    `json:"defaultPriority"`
+	FromLocation    string `json:"-"`
 }

@@ -21,6 +21,7 @@ func Config() cli.Command {
 			}
 			fmt.Println("Used Config:", conf.FromLocation)
 			fmt.Println("URL:", conf.URL)
+			fmt.Println("Default Priority:", conf.DefaultPriority)
 			fmt.Println("Token:", conf.Token)
 		},
 	}
