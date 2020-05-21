@@ -35,10 +35,13 @@ func doInit(ctx *cli.Context) {
 	hr()
 	token := inputToken(gotify.NewClient(serverURL, utils.CreateHTTPClient()))
 	hr()
+	defaultPriority := inputDefaultPriority()
+	hr()
 
 	conf := &config.Config{
-		URL:   serverURL.String(),
-		Token: token,
+		URL:             serverURL.String(),
+		Token:           token,
+		DefaultPriority: defaultPriority,
 	}
 
 	pathToWrite, err := config.ExistingConfig(config.GetLocations())
@@ -202,6 +205,20 @@ func inputRawToken(gotify *api.GotifyREST) string {
 		hr()
 	}
 
+}
+
+func inputDefaultPriority() int {
+	for {
+		defaultPriorityStr := inputString("Default Priority [0-10]: ")
+		defaultPriority, err := strconv.Atoi(defaultPriorityStr)
+		if err != nil || (defaultPriority > 10 || defaultPriority < 0) {
+			erred("Priority needs to be a number between 0 and 10.")
+			continue
+		} else {
+			return defaultPriority
+		}
+		hr()
+	}
 }
 
 func inputServerURL() *url.URL {

@@ -64,6 +64,10 @@ func doPush(ctx *cli.Context) {
 		stringURL = conf.URL
 	}
 
+	if !ctx.IsSet("priority") {
+		priority = conf.DefaultPriority
+	}
+
 	msg := models.MessageExternal{
 		Message:  msgText,
 		Title:    title,

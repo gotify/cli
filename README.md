@@ -151,13 +151,15 @@ Gotify-CLI will search the following paths for a config file:
 | ----- | ----------- | ------- |
 | token | an application token (a client token will not work) | `A4ZudDRdLT40L5X` |
 | url   | the URL to your [gotify/server][gotify/server]      | `https://gotify.example.com` |
+| defaultPriority   | Default priority ( set to 0 if not present)       | `6` |
 
 ### Config example
 
 ```json
 {
   "token": "A4ZudDRdLT40L5X",
-  "url": "https://gotify.example.com"
+  "url": "https://gotify.example.com",
+  "defaultPriority": 6
 }
 ```
 
