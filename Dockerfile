@@ -1,5 +1,5 @@
 # build
-FROM golang:1.11.5-stretch AS build-env
+FROM golang:1.14.4-stretch AS build-env
 
 WORKDIR /src
 
