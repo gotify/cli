@@ -21,6 +21,13 @@ func GetLocations() (res []string) {
 	}
 
 	if runtime.GOOS != "windows" {
+		if usr, err := user.Current(); err == nil {
+			fallbackXdgPath := filepath.Join(usr.HomeDir, ".config", "gotify", "cli.json")
+			if xdgPath != fallbackXdgPath {
+				res = append(res, fallbackXdgPath)
+			}
+		}
+
 		res = append(res, "/etc/gotify/cli.json")
 	}
 	return
