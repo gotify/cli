@@ -96,15 +96,15 @@ GLOBAL OPTIONS:
 
 ```
 NAME:
-   cli watch - watch the result of a command and pushes output difference
+   gotify watch - watch the result of a command and pushes output difference
 
 USAGE:
-   cli watch [command options] <cmd>
+   gotify watch [command options] <cmd>
 
 OPTIONS:
    --interval value, -n value  watch interval (sec) (default: 2)
    --priority value, -p value  Set the priority (default: 0)
-   --exec value, -x value      Pass command to exec (default to "sh -c")
+   --exec value, -x value      Pass command to exec (default: "sh -c")
    --title value, -t value     Set the title (empty for command)
    --token value               Override the app token
    --url value                 Override the Gotify URL
