@@ -25,11 +25,11 @@ $ http -f POST "https://push.example.de/message?token=<apptoken>" title="my titl
 
 ## Installation
 
-Download the [latest release][release] for your os: (this example uses version `v1.2.0`)
+Download the [latest release][release] for your os: (this example uses version `v2.2.0`)
 ```bash
-$ wget -O gotify https://github.com/gotify/cli/releases/download/v1.2.0/gotify-cli-linux-amd64
+$ wget -O gotify https://github.com/gotify/cli/releases/download/v2.2.0/gotify-cli-linux-amd64
 # or
-$ curl -Lo gotify https://github.com/gotify/cli/releases/download/v1.2.0/gotify-cli-linux-amd64
+$ curl -Lo gotify https://github.com/gotify/cli/releases/download/v2.2.0/gotify-cli-linux-amd64
 ```
 Make `gotify` executable:
 ```bash
@@ -41,9 +41,9 @@ $ gotify version
 ```
 It should output something like this:
 ```bash
-Version:   1.2.0
-Commit:    ec4a598f124c149802038c74571aa704a6660c4a
-BuildDate: 2018-11-24-19:41:36
+Version:   2.2.0
+Commit:    95cc125e39f805a1369b0c746c8bf3af15797a57
+BuildDate: 2020-09-25-16:27:04
 ```
 *(optional)* Move the executable to a folder on your `$PATH`:
 ```bash
@@ -67,17 +67,17 @@ $ gotify watch "curl http://example.com/api | jq '.data'"
 
 ## Help
 
-**Uses version `v2.1.0`**
+**Uses version `v2.2.0`**
 
 ```bash
 NAME:
    Gotify - The official Gotify-CLI
 
 USAGE:
-   cli [global options] command [command options] [arguments...]
+   gotify [global options] command [command options] [arguments...]
 
 VERSION:
-   2.1.0
+   2.2.0
 
 COMMANDS:
      init        Initializes the Gotify-CLI
