@@ -78,22 +78,20 @@ func doPush(ctx *cli.Context) {
 		Priority: priority,
 	}
 
-	if contentType != "" || clickUrl != "" {
-		msg.Extras = map[string]interface{}{
-		}
+	msg.Extras = map[string]interface{}{
+	}
 
-		if contentType != "" {
-			msg.Extras["client::display"] = map[string]interface{}{
-				"contentType": contentType,
-			}
+	if contentType != "" {
+		msg.Extras["client::display"] = map[string]interface{}{
+			"contentType": contentType,
 		}
+	}
 
-		if clickUrl != "" {
-			msg.Extras["client::notification"] = map[string]interface{}{
-				"click": map[string]string{
-					"url": clickUrl,
-				},
-			}
+	if clickUrl != "" {
+		msg.Extras["client::notification"] = map[string]interface{}{
+			"click": map[string]string{
+				"url": clickUrl,
+			},
 		}
 	}
 
