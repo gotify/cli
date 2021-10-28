@@ -29,6 +29,7 @@ func Push() cli.Command {
 			cli.StringFlag{Name: "url", Usage: "Override the Gotify URL"},
 			cli.BoolFlag{Name: "quiet,q", Usage: "Do not output anything (on success)"},
 			cli.StringFlag{Name: "contentType", Usage: "The content type of the message. See https://gotify.net/docs/msgextras#client-display"},
+			cli.StringFlag{Name: "clickUrl", Usage: "An URL to open upon clicking the notification. See https://gotify.net/docs/msgextras#client-notification"},
 			cli.BoolFlag{Name: "disable-unescape-backslash", Usage: "Disable evaluating \\n and \\t (if set, \\n and \\t will be seen as a string)"},
 		},
 		Action: doPush,
@@ -48,6 +49,8 @@ func doPush(ctx *cli.Context) {
 	token := ctx.String("token")
 	quiet := ctx.Bool("quiet")
 	contentType := ctx.String("contentType")
+	clickUrl := ctx.String("clickUrl")
+
 	if token == "" {
 		if confErr != nil {
 			utils.Exit1With("token is not configured, run 'gotify init'")
@@ -55,6 +58,7 @@ func doPush(ctx *cli.Context) {
 		}
 		token = conf.Token
 	}
+
 	stringURL := ctx.String("url")
 	if stringURL == "" {
 		if confErr != nil {
@@ -74,10 +78,19 @@ func doPush(ctx *cli.Context) {
 		Priority: priority,
 	}
 
+	msg.Extras = map[string]interface{}{
+	}
+
 	if contentType != "" {
-		msg.Extras = map[string]interface{}{
-			"client::display": map[string]interface{}{
-				"contentType": contentType,
+		msg.Extras["client::display"] = map[string]interface{}{
+			"contentType": contentType,
+		}
+	}
+
+	if clickUrl != "" {
+		msg.Extras["client::notification"] = map[string]interface{}{
+			"click": map[string]string{
+				"url": clickUrl,
 			},
 		}
 	}
