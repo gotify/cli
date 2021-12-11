@@ -1,5 +1,7 @@
 module github.com/gotify/cli/v2
 
+go 1.14
+
 require (
 	github.com/adrg/xdg v0.2.1
 	github.com/go-openapi/analysis v0.19.0 // indirect
@@ -20,5 +22,3 @@ require (
 	golang.org/x/sys v0.0.0-20190412213103-97732733099d // indirect
 	gopkg.in/urfave/cli.v1 v1.20.0
 )
-
-go 1.14
