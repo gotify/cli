@@ -70,6 +70,8 @@ Gotify-CLI is available [in the AUR][AUR], so you can install it with
 $ yay -S gotify-cli
 ```
 
+> Maintenance of the AUR package is not performed by the Gotify team.
+
 ### macOS
 
 Gotify-CLI is available [in Homebrew][brew], so you can install it with:
@@ -77,6 +79,8 @@ Gotify-CLI is available [in Homebrew][brew], so you can install it with:
 ```bash
 $ brew install gotify
 ```
+
+> Maintenance of the Brew package is not performed by the Gotify team.
 
 ## Usage
 
