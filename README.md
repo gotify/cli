@@ -172,7 +172,7 @@ export GOTIFY_SKIP_VERIFY_TLS=True
 
 
 ### Dockerfile
-The Dockerfile contains the steps necessary to build a new version of the CLI and then run it in 
+The Dockerfile contains the steps necessary to build a new version of the CLI and then run it in
 a minimal Alpine container.
 
 **Build:**
@@ -188,7 +188,7 @@ docker run -it -v "$PWD/cli.json:/home/app/cli.json" gotify/gotify-cli:latest pu
 ```
 
  [gotify/server]: https://github.com/gotify/server
- [travis-badge]: https://travis-ci.org/gotify/cli.svg?branch=master
- [travis]: https://travis-ci.org/gotify/cli
+ [travis-badge]: https://app.travis-ci.com/gotify/cli.svg?branch=master
+ [travis]: https://app.travis-ci.com/gotify/cli
  [badge-release]: https://img.shields.io/github/release/gotify/cli.svg
  [release]: https://github.com/gotify/cli/releases/latest
