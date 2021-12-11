@@ -25,30 +25,61 @@ $ http -f POST "https://push.example.de/message?token=<apptoken>" title="my titl
 
 ## Installation
 
+### Manually
+
 Download the [latest release][release] for your os: (this example uses version `v2.2.0`)
+
 ```bash
 $ wget -O gotify https://github.com/gotify/cli/releases/download/v2.2.0/gotify-cli-linux-amd64
 # or
 $ curl -Lo gotify https://github.com/gotify/cli/releases/download/v2.2.0/gotify-cli-linux-amd64
 ```
+
 Make `gotify` executable:
+
 ```bash
 $ chmod +x gotify
 ```
+
 Test if the Gotify-CLI works: *(When it doesn't work, you may have downloaded the wrong file or your device/os isn't supported)*
+
 ```bash
 $ gotify version
 ```
+
 It should output something like this:
+
 ```bash
 Version:   2.2.0
 Commit:    95cc125e39f805a1369b0c746c8bf3af15797a57
 BuildDate: 2020-09-25-16:27:04
 ```
+
 *(optional)* Move the executable to a folder on your `$PATH`:
+
 ```bash
 $ mv gotify /usr/bin/gotify
 ```
+
+### Arch Linux
+
+Gotify-CLI is available [in the AUR][AUR], so you can install it with
+[any AUR helper][AUR-helpers], i.e. [`yay`][yay]:
+
+```bash
+$ yay -S gotify-cli
+```
+
+### macOS
+
+Gotify-CLI is available [in Homebrew][brew], so you can install it with:
+
+```bash
+$ brew install gotify
+```
+
+## Usage
+
 Now you can either run the initialization wizard or [create a config manually](#Configuration). This tutorial uses the wizard.
 ```bash
 $ gotify init
@@ -192,3 +223,7 @@ docker run -it -v "$PWD/cli.json:/home/app/cli.json" gotify/gotify-cli:latest pu
  [travis]: https://app.travis-ci.com/gotify/cli
  [badge-release]: https://img.shields.io/github/release/gotify/cli.svg
  [release]: https://github.com/gotify/cli/releases/latest
+ [AUR]: https://aur.archlinux.org/packages/gotify-cli
+ [AUR-helpers]: https://wiki.archlinux.org/title/AUR_helpers
+ [yay]: https://aur.archlinux.org/packages/yay/
+ [brew]: https://brew.sh
