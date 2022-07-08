@@ -1,5 +1,5 @@
 # build
-FROM golang:1.17.5-stretch AS build-env
+FROM golang:1.18-stretch AS build-env
 
 WORKDIR /src
 
@@ -8,7 +8,7 @@ ADD . .
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o app .
 
 # run
-FROM alpine:3.15
+FROM alpine:3.16
 
 RUN apk add --no-cache \
     ca-certificates
