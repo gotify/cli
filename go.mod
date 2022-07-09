@@ -1,6 +1,6 @@
 module github.com/gotify/cli/v2
 
-go 1.17
+go 1.18
 
 require (
 	github.com/adrg/xdg v0.2.1
