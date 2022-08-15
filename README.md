@@ -16,12 +16,14 @@ Gotify-CLI is a command line client for pushing messages to [gotify/server][goti
 
 ## Alternatives
 
-You can simply use [curl](https://curl.haxx.se/), [HTTPie](https://httpie.org/) or any other http-client to push messages.
+You can simply use [curl](https://curl.haxx.se/), [HTTPie](https://httpie.org/) or any other http-client to push messages. Note that the priority can also be added.
 
 ```bash
 $ curl -X POST "https://push.example.de/message?token=<apptoken>" -F "title=my title" -F "message=my message"
 $ http -f POST "https://push.example.de/message?token=<apptoken>" title="my title" message="my message"
 ```
+
+For users of Python, see [Gotify Python client library](https://pypi.org/project/gotify/).
 
 ## Installation
 
