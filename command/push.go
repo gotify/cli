@@ -25,7 +25,7 @@ func Push() cli.Command {
 		Flags: []cli.Flag{
 			cli.IntFlag{Name: "priority,p", Usage: "Set the priority"},
 			cli.StringFlag{Name: "title,t", Usage: "Set the title (empty for app name)"},
-			cli.StringFlag{Name: "token", Usage: "Override the app token"},
+			cli.StringFlag{Name: "token", Usage: "Override the app token", EnvVar: "GOTIFY_TOKEN"},
 			cli.StringFlag{Name: "url", Usage: "Override the Gotify URL"},
 			cli.BoolFlag{Name: "quiet,q", Usage: "Do not output anything (on success)"},
 			cli.StringFlag{Name: "contentType", Usage: "The content type of the message. See https://gotify.net/docs/msgextras#client-display"},

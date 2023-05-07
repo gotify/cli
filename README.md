@@ -141,7 +141,7 @@ OPTIONS:
    --priority value, -p value  Set the priority (default: 0)
    --exec value, -x value      Pass command to exec (default: "sh -c")
    --title value, -t value     Set the title (empty for command)
-   --token value               Override the app token
+   --token value               Override the app token [$GOTIFY_TOKEN]
    --url value                 Override the Gotify URL
    --output value, -o value    Output verbosity (short|default|long) (default: "default")
 ```
@@ -163,7 +163,7 @@ DESCRIPTION:
 OPTIONS:
    --priority value, -p value    Set the priority (default: 0)
    --title value, -t value       Set the title (empty for app name)
-   --token value                 Override the app token
+   --token value                 Override the app token [$GOTIFY_TOKEN]
    --url value                   Override the Gotify URL
    --quiet, -q                   Do not output anything (on success)
    --contentType value           The content type of the message. See https://gotify.net/docs/msgextras#client-display

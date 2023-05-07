@@ -25,7 +25,7 @@ func Watch() cli.Command {
 			cli.IntFlag{Name: "priority,p", Usage: "Set the priority"},
 			cli.StringFlag{Name: "exec,x", Usage: "Pass command to exec", Value: "sh -c"},
 			cli.StringFlag{Name: "title,t", Usage: "Set the title (empty for command)"},
-			cli.StringFlag{Name: "token", Usage: "Override the app token"},
+			cli.StringFlag{Name: "token", Usage: "Override the app token", EnvVar: "GOTIFY_TOKEN"},
 			cli.StringFlag{Name: "url", Usage: "Override the Gotify URL"},
 			cli.StringFlag{Name: "output,o", Usage: "Output verbosity (short|default|long)", Value: "default"},
 		},
