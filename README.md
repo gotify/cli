@@ -205,6 +205,11 @@ If needed, you can disable SSL handcheck validation using an environment variabl
 export GOTIFY_SKIP_VERIFY_TLS=True
 ```
 
+For better security with self-signed certificate, you can also set custom root CA or pin the server cert for TLS verification:
+```
+export SSL_CERT_FILE=/path/to/cert.pem
+```
+
 
 ### Dockerfile
 The Dockerfile contains the steps necessary to build a new version of the CLI and then run it in
