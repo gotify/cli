@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/url"
 	"os"
-	"strings"
 
 	"github.com/gotify/cli/v2/config"
 	"github.com/gotify/cli/v2/utils"
@@ -31,6 +30,7 @@ func Push() cli.Command {
 			cli.StringFlag{Name: "contentType", Usage: "The content type of the message. See https://gotify.net/docs/msgextras#client-display"},
 			cli.StringFlag{Name: "clickUrl", Usage: "An URL to open upon clicking the notification. See https://gotify.net/docs/msgextras#client-notification"},
 			cli.BoolFlag{Name: "disable-unescape-backslash", Usage: "Disable evaluating \\n and \\t (if set, \\n and \\t will be seen as a string)"},
+			cli.BoolFlag{Name: "no-split", Usage: "Do not split the message on null character when reading from stdin"},
 		},
 		Action: doPush,
 	}
@@ -39,9 +39,12 @@ func Push() cli.Command {
 func doPush(ctx *cli.Context) {
 	conf, confErr := config.ReadConfig(config.GetLocations())
 
-	msgText := readMessage(ctx)
-	if !ctx.Bool("disable-unescape-backslash") {
-		msgText = utils.Evaluate(msgText)
+	msgText := make(chan string)
+	null := '\x00'
+	if ctx.Bool("no-split") {
+		go readMessage(ctx.Args(), os.Stdin, msgText, nil)
+	} else {
+		go readMessage(ctx.Args(), os.Stdin, msgText, &null)
 	}
 
 	priority := ctx.Int("priority")
@@ -72,36 +75,47 @@ func doPush(ctx *cli.Context) {
 		priority = conf.DefaultPriority
 	}
 
-	msg := models.MessageExternal{
-		Message:  msgText,
-		Title:    title,
-		Priority: priority,
-	}
-
-	msg.Extras = map[string]interface{}{
-	}
-
-	if contentType != "" {
-		msg.Extras["client::display"] = map[string]interface{}{
-			"contentType": contentType,
-		}
-	}
-
-	if clickUrl != "" {
-		msg.Extras["client::notification"] = map[string]interface{}{
-			"click": map[string]string{
-				"url": clickUrl,
-			},
-		}
-	}
-
 	parsedURL, err := url.Parse(stringURL)
 	if err != nil {
 		utils.Exit1With("invalid url", stringURL)
 		return
 	}
 
-	pushMessage(parsedURL, token, msg, quiet)
+	var sent bool
+	for msgText := range msgText {
+		if !ctx.Bool("disable-unescape-backslash") {
+			msgText = utils.Evaluate(msgText)
+		}
+
+		msg := models.MessageExternal{
+			Message:  msgText,
+			Title:    title,
+			Priority: priority,
+		}
+
+		msg.Extras = map[string]interface{}{}
+
+		if contentType != "" {
+			msg.Extras["client::display"] = map[string]interface{}{
+				"contentType": contentType,
+			}
+		}
+
+		if clickUrl != "" {
+			msg.Extras["client::notification"] = map[string]interface{}{
+				"click": map[string]string{
+					"url": clickUrl,
+				},
+			}
+		}
+
+		pushMessage(parsedURL, token, msg, quiet)
+
+		sent = true
+	}
+	if !sent {
+		utils.Exit1With("no message sent! a message must be set, either as argument or via stdin")
+	}
 }
 
 func pushMessage(parsedURL *url.URL, token string, msg models.MessageExternal, quiet bool) {
@@ -117,25 +131,5 @@ func pushMessage(parsedURL *url.URL, token string, msg models.MessageExternal, q
 		}
 	} else {
 		utils.Exit1With(err)
-	}
-}
-
-func readMessage(ctx *cli.Context) string {
-	msgArgs := strings.Join(ctx.Args(), " ")
-
-	msgStdin := utils.ReadFrom(os.Stdin)
-
-	if msgArgs == "" && msgStdin == "" {
-		utils.Exit1With("a message must be set, either as argument or via stdin")
-	}
-
-	if msgArgs != "" && msgStdin != "" {
-		utils.Exit1With("a message is set via stdin and arguments, use only one of them")
-	}
-
-	if msgArgs == "" {
-		return msgStdin
-	} else {
-		return msgArgs
 	}
 }

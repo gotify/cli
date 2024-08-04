@@ -120,18 +120,18 @@ func doWatch(ctx *cli.Context) {
 			case "long":
 				fmt.Fprintf(msgData, "command output for \"%s\" changed:\n\n", cmdStringNotation)
 				fmt.Fprintln(msgData, "== BEGIN OLD OUTPUT ==")
-				fmt.Fprint(msgData, lastOutput)
+				fmt.Fprintln(msgData, lastOutput)
 				fmt.Fprintln(msgData, "== END OLD OUTPUT ==")
 				fmt.Fprintln(msgData, "== BEGIN NEW OUTPUT ==")
-				fmt.Fprint(msgData, output)
+				fmt.Fprintln(msgData, output)
 				fmt.Fprintln(msgData, "== END NEW OUTPUT ==")
 			case "default":
 				fmt.Fprintf(msgData, "command output for \"%s\" changed:\n\n", cmdStringNotation)
 				fmt.Fprintln(msgData, "== BEGIN NEW OUTPUT ==")
-				fmt.Fprint(msgData, output)
+				fmt.Fprintln(msgData, output)
 				fmt.Fprintln(msgData, "== END NEW OUTPUT ==")
 			case "short":
-				fmt.Fprintf(msgData, output)
+				fmt.Fprintln(msgData, output)
 			}
 
 			msgString := msgData.String()
