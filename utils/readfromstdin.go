@@ -1,22 +1,23 @@
 package utils
 
 import (
+	"io"
 	"os"
-	"io/ioutil"
 )
 
-func ReadFrom(file *os.File) string {
-	fi, err := os.Stdin.Stat()
-	if err != nil {
-		return ""
+func ProbeStdin(file io.Reader) bool {
+	if file == nil {
+		return false
 	}
-	if fi.Mode()&os.ModeNamedPipe == 0 && !fi.Mode().IsRegular() {
-		return ""
+	if file, ok := file.(*os.File); ok {
+		fi, err := file.Stat()
+		if err != nil {
+			return false
+		}
+		if fi.Mode()&os.ModeNamedPipe == 0 && !fi.Mode().IsRegular() {
+			return false
+		}
 	}
 
-	bytes, err := ioutil.ReadAll(file)
-	if err != nil {
-		return ""
-	}
-	return string(bytes)
+	return true
 }

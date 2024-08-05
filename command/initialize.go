@@ -71,7 +71,7 @@ func inputConfigLocation() string {
 	for {
 		fmt.Println("Where to put the config file?")
 		for i, location := range locations {
-			fmt.Println(fmt.Sprintf("%d. %s", i+1, location))
+			fmt.Printf("%d. %s\n", i+1, location)
 		}
 		value := inputString("Enter a number: ")
 		hr()
@@ -215,9 +215,9 @@ func inputDefaultPriority() int {
 			erred("Priority needs to be a number between 0 and 10.")
 			continue
 		} else {
+			hr()
 			return defaultPriority
 		}
-		hr()
 	}
 }
 
@@ -251,7 +251,7 @@ func inputServerURL() *url.URL {
 		})
 		if err == nil {
 			info := version.(models.VersionInfo)
-			fmt.Println(fmt.Sprintf("Gotify v%s@%s", info.Version, info.BuildDate))
+			fmt.Printf("Gotify v%s@%s\n", info.Version, info.BuildDate)
 			return parsedURL
 		}
 		hr()
