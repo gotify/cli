@@ -1,61 +1,49 @@
 package command
 
 import (
+	"bufio"
+	"errors"
 	"io"
 	"strings"
 
 	"github.com/gotify/cli/v2/utils"
 )
 
-func readMessage(args []string, r io.Reader, output chan<- string, split *rune) {
-	msgArgs := strings.Join(args, " ")
+func readMessage(args []string, r io.Reader, output chan<- string, splitOnNull bool) {
+	defer close(output)
 
-	if msgArgs != "" {
+	switch {
+	case len(args) > 0:
 		if utils.ProbeStdin(r) {
 			utils.Exit1With("message is set via arguments and stdin, use only one of them")
 		}
 
-		output <- msgArgs
-		close(output)
+		output <- strings.Join(args, " ")
+	case splitOnNull:
+		read := bufio.NewReader(r)
+		for {
+			s, err := read.ReadString('\x00')
+			if err != nil {
+				if !errors.Is(err, io.EOF) {
+					utils.Exit1With("read error", err)
+				}
+				if len(s) > 0 {
+					output <- s
+				}
+				return
+			} else {
+				if len(s) > 1 {
+					output <- strings.TrimSuffix(s, "\x00")
+				}
+			}
+		}
+	default:
+		bytes, err := io.ReadAll(r)
+		if err != nil {
+			utils.Exit1With("cannot read", err)
+		}
+		output <- string(bytes)
 		return
 	}
 
-	var buf strings.Builder
-	for {
-		var tmp [256]byte
-		n, err := r.Read(tmp[:])
-		if err != nil {
-			if err.Error() == "EOF" {
-				break
-			}
-			utils.Exit1With(err)
-		}
-		tmpStr := string(tmp[:n])
-		if split != nil {
-			// split the message on the null character
-			parts := strings.Split(tmpStr, string(*split))
-			if len(parts) == 1 {
-				buf.WriteString(parts[0])
-				continue
-			}
-
-			previous := buf.String()
-			// fuse previous with parts[0], send parts[1] .. parts[n-2] and set parts[n-1] as new previous
-			firstMsg := previous + parts[0]
-			output <- firstMsg
-			for _, part := range parts[1 : len(parts)-1] {
-				output <- part
-			}
-			buf.Reset()
-			buf.WriteString(parts[len(parts)-1])
-		} else {
-			buf.WriteString(tmpStr)
-		}
-	}
-
-	if buf.Len() > 0 {
-		output <- buf.String()
-	}
-
-	close(output)
 }

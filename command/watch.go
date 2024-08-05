@@ -131,7 +131,7 @@ func doWatch(ctx *cli.Context) {
 				fmt.Fprintln(msgData, output)
 				fmt.Fprintln(msgData, "== END NEW OUTPUT ==")
 			case "short":
-				fmt.Fprintln(msgData, output)
+				fmt.Fprint(msgData, output)
 			}
 
 			msgString := msgData.String()

@@ -39,13 +39,8 @@ func Push() cli.Command {
 func doPush(ctx *cli.Context) {
 	conf, confErr := config.ReadConfig(config.GetLocations())
 
-	msgText := make(chan string)
-	null := '\x00'
-	if ctx.Bool("no-split") {
-		go readMessage(ctx.Args(), os.Stdin, msgText, nil)
-	} else {
-		go readMessage(ctx.Args(), os.Stdin, msgText, &null)
-	}
+	msgTextChan := make(chan string)
+	go readMessage(ctx.Args(), os.Stdin, msgTextChan, !ctx.Bool("no-split"))
 
 	priority := ctx.Int("priority")
 	title := ctx.String("title")
@@ -81,8 +76,24 @@ func doPush(ctx *cli.Context) {
 		return
 	}
 
+	parsedExtras := make(map[string]interface{})
+
+	if contentType != "" {
+		parsedExtras["client::display"] = map[string]interface{}{
+			"contentType": contentType,
+		}
+	}
+
+	if clickUrl != "" {
+		parsedExtras["client::notification"] = map[string]interface{}{
+			"click": map[string]string{
+				"url": clickUrl,
+			},
+		}
+	}
+
 	var sent bool
-	for msgText := range msgText {
+	for msgText := range msgTextChan {
 		if !ctx.Bool("disable-unescape-backslash") {
 			msgText = utils.Evaluate(msgText)
 		}
@@ -91,22 +102,7 @@ func doPush(ctx *cli.Context) {
 			Message:  msgText,
 			Title:    title,
 			Priority: priority,
-		}
-
-		msg.Extras = map[string]interface{}{}
-
-		if contentType != "" {
-			msg.Extras["client::display"] = map[string]interface{}{
-				"contentType": contentType,
-			}
-		}
-
-		if clickUrl != "" {
-			msg.Extras["client::notification"] = map[string]interface{}{
-				"click": map[string]string{
-					"url": clickUrl,
-				},
-			}
+			Extras:   parsedExtras,
 		}
 
 		pushMessage(parsedURL, token, msg, quiet)
