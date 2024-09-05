@@ -80,8 +80,7 @@ func doPush(ctx *cli.Context) {
 		Priority: priority,
 	}
 
-	msg.Extras = map[string]interface{}{
-	}
+	msg.Extras = map[string]interface{}{}
 
 	if contentType != "" {
 		msg.Extras["client::display"] = map[string]interface{}{
@@ -89,22 +88,15 @@ func doPush(ctx *cli.Context) {
 		}
 	}
 
+	clientNotification := map[string]interface{}{}
 	if clickUrl != "" {
-		msg.Extras["client::notification"] = map[string]interface{}{
-			"click": map[string]string{
-				"url": clickUrl,
-			},
-		}
+		clientNotification["click"] = map[string]string{"url": clickUrl}
 	}
-
 	if bigImageUrl != "" {
-		if _, clientNotification := msg.Extras["client::notification"]; clientNotification {
-			msg.Extras["client::notification"].(map[string]interface{})["bigImageUrl"] = bigImageUrl;
-		} else {
-			msg.Extras["client::notification"] = map[string]interface{}{
-				"bigImageUrl": bigImageUrl,
-			}
-		}
+		clientNotification["bigImageUrl"] = bigImageUrl
+	}
+	if len(clientNotification) > 0 {
+		msg.Extras["client::notification"] = clientNotification
 	}
 
 	parsedURL, err := url.Parse(stringURL)
