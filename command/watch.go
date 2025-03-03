@@ -49,6 +49,9 @@ func doWatch(ctx *cli.Context) {
 	}
 	interval := ctx.Float64("interval")
 	priority := ctx.Int("priority")
+	if !ctx.IsSet("priority") && conf != nil {
+		priority = conf.DefaultPriority
+	}
 	title := ctx.String("title")
 	if title == "" {
 		title = cmdStringNotation

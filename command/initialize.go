@@ -215,9 +215,9 @@ func inputDefaultPriority() int {
 			erred("Priority needs to be a number between 0 and 10.")
 			continue
 		} else {
+			hr()
 			return defaultPriority
 		}
-		hr()
 	}
 }
 
