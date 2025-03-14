@@ -91,7 +91,7 @@ $ gotify init
 When you've finished initializing Gotify-CLI, you are ready to push messages to [gotify/server][gotify/server].
 
 Here are some examples commands, you can view the "push help" via `gotify help push` (or have a look at [push help](#push-help)).
-```json
+```bash
 $ gotify push my message
 $ gotify push "my message"
 $ echo my message | gotify push
