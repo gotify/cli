@@ -1,0 +1,41 @@
+name: Build and Push Image
+on: [push]
+
+jobs:
+  build:
+    name: Build and push image
+    runs-on: ubuntu-24.04
+    container:
+      image: quay.io/podman/stable:latest
+      options: --privileged
+
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build image
+        id: build
+        run: |
+          podman build -t cli .
+          podman tag cli ghcr.io/${{ github.repository }}:latest
+          podman tag cli ghcr.io/${{ github.repository }}:${{ github.sha }}
+
+      - name: Push to registry
+        #if: ${{ startsWith(github.ref, 'refs/heads/master') }} 
+        id: push
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: ghcr.io/${{ github.repository }}
+          tags: latest ${{ github.sha }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Print image url
+        run: echo "Image pushed to ${{ steps.push.outputs.registry-paths }}"
