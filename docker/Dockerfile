@@ -1,26 +1,21 @@
 ARG BUILDKIT_SBOM_SCAN_CONTEXT=true
-# Suppress warning about invalid variable expansion
 ARG GO_VERSION=PLEASE_PROVIDE_GO_VERSION
-ARG DEBIAN=sid-slim
 ARG BUILDPLATFORM
-ARG TARGETPLATFORM
 
-# Hack to normalize platform to match the chosed build image
-# Get the gotify/build image tag
-ARG __TARGETPLATFORM_DASHES=${TARGETPLATFORM/\//-}
-ARG __TARGETPLATFORM_GO_NOTATION=${__TARGETPLATFORM_DASHES/arm\/v7/arm-7}
-
-# --- Go Builder ---
 FROM --platform=${BUILDPLATFORM} docker.io/golang:${GO_VERSION}-alpine AS builder
 
-ARG LD_FLAGS=""
+ARG TARGETPLATFORM
+ARG TARGETOS
+ARG TARGETARCH
+ARG LD_FLAGS
 
-RUN apk add --no-cache ca-certificates git make bash
+WORKDIR /src
+COPY . /src
 
-COPY . /src/gotify
-
-RUN cd /src/gotify && \
-    LD_FLAGS=${LD_FLAGS} make OUTPUT=/target/app/gotify-cli _build_within_docker
+RUN GOOS=${TARGETOS} \
+    GOARCH=${TARGETARCH} \
+    GOARM=$(echo $TARGETPLATFORM | sed -En 's|^linux/arm/v(.*)|\1|p') \
+    go build -mod=readonly -a -installsuffix cgo -ldflags "${LD_FLAGS}" -o /target/app/gotify-cli
 
 FROM docker.io/library/alpine:latest
 

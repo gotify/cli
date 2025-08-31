@@ -18,3 +18,10 @@ jobs:
 
       - name: Test
         run: go test ./...
+  image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - run: |
+          make PLATFORM=linux/amd64 build-docker-multiarch

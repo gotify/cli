@@ -8,25 +8,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Go environment
-        uses: actions/setup-go@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
         with:
           go-version: 1.24.x
           stable: true
 
-      - name: Get dependencies
-        run: go get -v -t -d ./...
+      - run: go get -v -t -d ./...
+      - run: make VERSION=${GITHUB_REF/refs\/tags\/v/} clean build
 
-      - name: Build
-        run: |
-          TAG=$(git describe --tags --abbrev=0)
-          GIT_TAG=$TAG make clean build
-
-      - name: Create release
-        uses: svenstaro/upload-release-action@v2
+      - uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: build/*
@@ -35,6 +26,7 @@ jobs:
           file_glob: true
 
   image:
+    if: ${{ startsWith(github.ref, 'refs/heads/master') || startsWith(github.ref, 'refs/tags/v') }}
     runs-on: ubuntu-latest
 
     permissions:
@@ -44,38 +36,25 @@ jobs:
       id-token: write
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Store version in environment variable if this is a release tag
-        if: startsWith(github.ref, 'refs/tags/v')
+      - if: startsWith(github.ref, 'refs/tags/v')
         run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
+      - run: echo "DOCKER_BUILD_PUSH=true" >> $GITHUB_ENV
 
-      - name: Enable images push
-        if: ${{ startsWith(github.ref, 'refs/heads/master') || startsWith(github.ref, 'refs/tags/v') }}
-        run: echo "DOCKER_BUILD_PUSH=true" >> $GITHUB_ENV
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Authenticate to Docker Hub registry
-        uses: docker/login-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/login-action@v3
         with:
           registry: docker.io
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASS }}
-
-      - name: Authenticate to Github Container registry
-        uses: docker/login-action@v3
+      - uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ github.token }}
 
-      - name: Build and push the images
-        run: |
-          make REGISTRY=docker.io IMAGE=${{ github.repository }} build-docker-multiarch
-          make REGISTRY=ghcr.io IMAGE=${{ github.repository }} build-docker-multiarch
+      - run: |
+          make REGISTRY=docker.io build-docker-multiarch
+          make REGISTRY=ghcr.io build-docker-multiarch
